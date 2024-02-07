@@ -1,0 +1,3 @@
+La idea de esta api es poder crear sistema de registro donde los usuarios nuevos se registren y el administrador pueda tener la base de datos de cada uno de los ateltas nuevos. 
+
+La idea tambien es poder desarrollar una pagina mas interna donde los usuarios puedan ver videos generales de los ejercicios que deseen realizar. 
