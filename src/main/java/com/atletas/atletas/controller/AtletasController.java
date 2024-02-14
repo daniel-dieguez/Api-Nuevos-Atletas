@@ -2,6 +2,7 @@ package com.atletas.atletas.controller;
 
 
 import com.atletas.atletas.dao.services.IAtletasServicesImpl;
+import com.atletas.atletas.models.entities.AtletasDTO;
 import com.atletas.atletas.models.model.Atletas;
 import jakarta.validation.Valid;
 import org.slf4j.ILoggerFactory;
@@ -57,7 +58,7 @@ public class AtletasController {
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody Atletas value, BindingResult result){
         Map<String, Object> response = new HashMap<>();
-        if(result.hasErrors() ==true){
+        if(result.hasErrors() == true){
             List<String> errores = result.getFieldErrors().stream().map(error -> error.getDefaultMessage())
                     .collect(Collectors.toList()); // getFielError me enlistara los campos que se encuentraron errores, El collector nos ayuda a enlistar lso errorres PREGUNTAR A CHATGPT
             response.put("errores", errores);
@@ -71,6 +72,7 @@ public class AtletasController {
             atletas.setEmail(value.getEmail());
             atletas.setPassword(value.getPassword());
             atletas.setPago(value.getPago());
+            this.iAtletasServices.save(atletas);
             logger.info("Se acaba de agregar nuevo atleta");
             response.put("mensaje", "Un nuevo atleta se ingreso");
             response.put("Atleta", atletas);
@@ -85,6 +87,34 @@ public class AtletasController {
 
         }
 
+    }
+
+
+    @DeleteMapping("/{atletaid}")
+    public ResponseEntity<?> delete(@PathVariable String atletaid){
+        Map<String, Object> response = new HashMap<>();
+        try{
+            Atletas atletas = this.iAtletasServices.findById(atletaid);
+            if(atletas == null){
+                response.put("mensaje","el atleta con el ide".concat(atletaid).concat("no existe"));
+                return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+            }else {
+                this.iAtletasServices.delete(atletas);
+                response.put("mensaje","el atleta con el id".concat(atletaid).concat("fue eliminado "));
+                response.put("listado", atletas);
+                logger.info("El miembro fue eliminada con exito");
+                return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
+            }
+
+        }catch (CannotCreateTransactionException e){
+            response = this.getTransactionExepcion(response, e);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.SERVICE_UNAVAILABLE);
+
+        }catch (DataAccessException e){
+            response = this.getDataAccessException(response, e);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.SERVICE_UNAVAILABLE);
+
+        }
     }
 
 
