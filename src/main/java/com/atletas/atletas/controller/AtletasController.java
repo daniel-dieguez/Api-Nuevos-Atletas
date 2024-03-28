@@ -62,7 +62,7 @@ public class AtletasController {
             List<String> errores = result.getFieldErrors().stream().map(error -> error.getDefaultMessage())
                     .collect(Collectors.toList()); // getFielError me enlistara los campos que se encuentraron errores, El collector nos ayuda a enlistar lso errorres PREGUNTAR A CHATGPT
             response.put("errores", errores);
-            logger.info("se encontraron errores al momento de validar");
+            logger.info("se encontraron errores al momento de validarr");
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
         try{
