@@ -73,7 +73,7 @@ public class AtletasController {
             atletas.setPassword(value.getPassword());
             atletas.setPago(value.getPago());
             this.iAtletasServices.save(atletas);
-            logger.info("Se acaba de agregar nuevo atleta");
+            logger.info("Se acaba de agregar nuevo atletaa");
             response.put("mensaje", "Un nuevo atleta se ingreso");
             response.put("Atleta", atletas);
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
